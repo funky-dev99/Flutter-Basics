@@ -23,17 +23,19 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        title: Text("Demo App"),
+        backgroundColor: Colors.blueGrey[900],
+        title: Text("I am Rich"),
       ) ,
 
       body: Center(
-        child: Text("My Name is Shahiru"),
+        child: Image(
+            image: NetworkImage('https://hips.hearstapps.com/hmg-prod/images/too-rich-canceled-ellen-1598642045.jpg?resize=980:*')),
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.blueGrey[900],
         child: Icon(Icons.add),
         onPressed: () {  },
       ),
