@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 void main () {
   return runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Dicee'),
-          backgroundColor: Colors.red,
+          title: Text('Shahiru',style: TextStyle(
+            fontSize: 17.0, color: Colors.black
+          ),),
+          backgroundColor: Colors.blue,
         ),
         body: DicePage(),
       ),
@@ -25,7 +28,7 @@ class DicePage extends StatelessWidget {
           Expanded(
               child: MaterialButton(
                   onPressed: (){
-                    print('Fuck');
+                    // print('Fuck');
                   },
                 child: Image.asset('images/poor.png'),
               ),
