@@ -39,21 +39,40 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
         title:  Text('Demo App'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              color: Colors.blue,
+      body: Form
+        (child:SingleChildScrollView(
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.person),
+                hintText: 'Enter your name',
+                labelText: 'Name',
+              ),
             ),
-            Container(
-              height: 200,
-              color: Colors.amber,
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.phone),
+                hintText: 'Enter a phone number',
+                labelText: 'Phone',
+              ),
             ),
-            Container(
-              height: 200,
-              color: Colors.black,)
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.calendar_today),
+                hintText: 'Enter your date of birth',
+                labelText: 'Dob',
+              ),
+            ),
+            new Container(
+                padding: const EdgeInsets.only(left: 130.0, top: 40.0),
+                child: ElevatedButton(
+                  child: const Text('Submit'),
+                  onPressed: null,
+                )),
           ],
+      ),
         ),
       )
 
