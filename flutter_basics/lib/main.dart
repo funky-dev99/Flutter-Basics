@@ -39,32 +39,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
         title:  Text('Demo App'),
       ),
-      body: ListView.separated(
-        itemBuilder: (context, position) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                'List Item $position',
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 200,
+              color: Colors.blue,
             ),
-          );
-        },
-        separatorBuilder: (context, position) {
-          return Card(
-            color: Colors.grey,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                'Separator $position',
-                style: TextStyle(color: Colors.white),
-              ),
+            Container(
+              height: 200,
+              color: Colors.amber,
             ),
-          );
-        },
-        itemCount: 20,
-      ),
-
+            Container(
+              height: 200,
+              color: Colors.black,)
+          ],
+        ),
+      )
 
       // body: Center(child: Text('You have pressed the button $_count times.')),
       // floatingActionButton: FloatingActionButton(
