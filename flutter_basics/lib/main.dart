@@ -32,14 +32,26 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
    int _selectedIndex = 0;
+   double _currentSliderValue = 20;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
        body: Center(
-        child: Text('Hello', style: TextStyle(fontSize: 30),),
+        child: Slider(
+          value: _currentSliderValue,
+          max: 100,
+          divisions: 5,
+          label: _currentSliderValue.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        ),
       ),
+
       bottomNavigationBar:
       BottomNavigationBar(
         items: const [
