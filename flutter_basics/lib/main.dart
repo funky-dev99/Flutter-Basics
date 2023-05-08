@@ -39,16 +39,44 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
        body: Center(
-        child: Slider(
-          value: _currentSliderValue,
-          max: 100,
-          divisions: 5,
-          label: _currentSliderValue.round().toString(),
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
-          },
+        child: GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(20),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: 2,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[100],
+              child: const Text("He'd have you all unravel at the"),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[200],
+              child: const Text('Heed not the rabble'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[300],
+              child: const Text('Sound of screams but the'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[400],
+              child: const Text('Who scream'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[500],
+              child: const Text('Revolution is coming...'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.teal[600],
+              child: const Text('Revolution, they...'),
+            ),
+          ],
         ),
       ),
 
