@@ -38,48 +38,61 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
-       body: Center(
-        child: GridView.count(
-          primary: false,
-          padding: const EdgeInsets.all(20),
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          crossAxisCount: 2,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[100],
-              child: const Text("He'd have you all unravel at the"),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[200],
-              child: const Text('Heed not the rabble'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[300],
-              child: const Text('Sound of screams but the'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[400],
-              child: const Text('Who scream'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[500],
-              child: const Text('Revolution is coming...'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[600],
-              child: const Text('Revolution, they...'),
-            ),
-          ],
-        ),
-      ),
-
+       body:
+       Table(
+         border: TableBorder.all(),
+         columnWidths: const <int, TableColumnWidth>{
+           0: IntrinsicColumnWidth(),
+           1: FlexColumnWidth(),
+           2: FixedColumnWidth(64),
+         },
+         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+         children: <TableRow>[
+           TableRow(
+             children: <Widget>[
+               Container(
+                 height: 32,
+                 color: Colors.green,
+               ),
+               TableCell(
+                 verticalAlignment: TableCellVerticalAlignment.top,
+                 child: Container(
+                   height: 32,
+                   width: 32,
+                   color: Colors.red,
+                 ),
+               ),
+               Container(
+                 height: 64,
+                 color: Colors.blue,
+               ),
+             ],
+           ),
+           TableRow(
+             decoration: const BoxDecoration(
+               color: Colors.grey,
+             ),
+             children: <Widget>[
+               Container(
+                 height: 64,
+                 width: 128,
+                 color: Colors.purple,
+               ),
+               Container(
+                 height: 32,
+                 color: Colors.yellow,
+               ),
+               Center(
+                 child: Container(
+                   height: 32,
+                   width: 32,
+                   color: Colors.orange,
+                 ),
+               ),
+             ],
+           ),
+         ],
+       ),
       bottomNavigationBar:
       BottomNavigationBar(
         items: const [
