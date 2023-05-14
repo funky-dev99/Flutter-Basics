@@ -39,6 +39,8 @@ dependencies:
   device_preview: ^1.1.0
   geolocator: ^9.0.2
   baseflow_plugin_template: ^2.1.1
+  location: any
+  background_location: any
 
 dev_dependencies:
   flutter_test:
