@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -27,22 +29,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /*
-  serviceEnabled and permissionGranted are used
-  to check if location service is enable and permission is granted
-  */
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
   LocationData? _userLocation;
 
-  // This function will get user location
   Future<void> _getUserLocation() async {
     Location location = Location();
 
-
-
-    // Check if location service is enable
     _serviceEnabled = await location.serviceEnabled();
     if (_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -51,7 +45,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    // Check if permission is granted
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
@@ -64,13 +57,18 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _userLocation = locationData;
     });
+
+    if (_userLocation != null) {
+      print('Latitude: ${_userLocation?.latitude}');
+      print('Longitude: ${_userLocation?.longitude}');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kindacode.com'),
+        title: const Text('Get Location'),
       ),
       body: Center(
         child: Padding(
@@ -79,20 +77,20 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: _getUserLocation,
-                  child: const Text('Check Location')),
+                onPressed: _getUserLocation,
+                child: const Text('Check Location'),
+              ),
               const SizedBox(height: 25),
-              // Display latitude & longtitude
               _userLocation != null
                   ? Wrap(
                 children: [
                   Text('Your latitude: ${_userLocation?.latitude}'),
                   const SizedBox(width: 10),
-                  Text('Your longtitude: ${_userLocation?.longitude}')
+                  Text('Your longitude: ${_userLocation?.longitude}'),
                 ],
               )
                   : const Text(
-                  'Please enable location service and grant permission')
+                  'Please enable location service and grant permission'),
             ],
           ),
         ),
