@@ -1,46 +1,91 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
+class ListItem {
+  final String title;
+  final String subTitle;
+  final String description;
+
+  ListItem({required this.title, required this.subTitle, required this.description});
 }
 
-class _HomePageState extends State<HomePage> {
-  late String _timeString;
-
-  @override
-  void initState() {
-    _timeString = _formatDateTime(DateTime.now());
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
-    super.initState();}
+class ListPage extends StatelessWidget {
+  final List<ListItem> items = [
+    ListItem(
+      title: 'Item 1',
+      subTitle: 'Sub Title 1',
+      description: 'Description 1',
+    ),
+    ListItem(
+      title: 'Item 2',
+      subTitle: 'Sub Title 2',
+      description: 'Description 2',
+    ),
+    ListItem(
+      title: 'Item 3',
+      subTitle: 'Sub Title 3',
+      description: 'Description 3',
+    ),
+    ListItem(
+      title: 'Item 4',
+      subTitle: 'Sub Title 4',
+      description: 'Description 4',
+    ),
+    ListItem(
+      title: 'Item 5',
+      subTitle: 'Sub Title 5',
+      description: 'Description 5',
+    ),
+    ListItem(
+      title: 'Item 6',
+      subTitle: 'Sub Title 6',
+      description: 'Description 6',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Datepicker")),
-        body: Container(
+      appBar: AppBar(
+        title: Text('List Example'),
+      ),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Icon(Icons.person),
+            title: Text(items[index].title),
+            subtitle: Text(items[index].subTitle),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Perform approve action
+                    print('Approve button pressed');
+                  },
+                  child: Text('Approve'),
+                ),
+                SizedBox(width: 8.0),
+                ElevatedButton(
+                  onPressed: () {
+                    // Perform reject action
+                    print('Reject button pressed');
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  child: Text('Reject'),
+                ),
 
-            padding:const EdgeInsets.all(15),
-            height:150,
-            child:Center(
-              child:  Text(_timeString),
-
-            )
-        ),
+              ],
+            ),
+            onTap: () {
+              // Handle item tap
+              print('Item $index tapped');
+            },
+          );
+        },
+      ),
     );
-  }
-  void _getTime() {
-    final DateTime now = DateTime.now();
-    final String formattedDateTime = _formatDateTime(now);
-    setState(() {
-      _timeString = formattedDateTime;
-    });
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    return DateFormat('hh:mm:ss').format(dateTime);
   }
 }
