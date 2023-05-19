@@ -1,125 +1,64 @@
-//
-//
-// import 'package:flutter/material.dart';
-// import 'package:location/location.dart';
-//
-// void main() {
-//   runApp(const MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       // Remove the debug banner
-//       debugShowCheckedModeBanner: false,
-//       title: 'Location',
-//       home: HomePage(),
-//     );
-//   }
-// }
-//
-// class HomePage extends StatefulWidget {
-//   const HomePage({Key? key}) : super(key: key);
-//
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-//
-// class _HomePageState extends State<HomePage> {
-//   late bool _serviceEnabled;
-//   late PermissionStatus _permissionGranted;
-//
-//   LocationData? _userLocation;
-//
-//   Future<void> _getUserLocation() async {
-//     Location location = Location();
-//
-//     _serviceEnabled = await location.serviceEnabled();
-//     if (_serviceEnabled) {
-//       _serviceEnabled = await location.requestService();
-//       if (!_serviceEnabled) {
-//         return;
-//       }
-//     }
-//
-//     _permissionGranted = await location.hasPermission();
-//     if (_permissionGranted == PermissionStatus.denied) {
-//       _permissionGranted = await location.requestPermission();
-//       if (_permissionGranted != PermissionStatus.granted) {
-//         return;
-//       }
-//     }
-//
-//     final locationData = await location.getLocation();
-//     setState(() {
-//       _userLocation = locationData;
-//     });
-//
-//     if (_userLocation != null) {
-//       print('Latitude: ${_userLocation?.latitude}');
-//       print('Longitude: ${_userLocation?.longitude}');
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Get Location'),
-//       ),
-//       body: Center(
-//         child: Padding(
-//           padding: const EdgeInsets.all(20),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               ElevatedButton(
-//                 onPressed: _getUserLocation,
-//                 child: const Text('Check Location'),
-//               ),
-//               const SizedBox(height: 25),
-//               _userLocation != null
-//                   ? Wrap(
-//                 children: [
-//                   Text('Your latitude: ${_userLocation?.latitude}'),
-//                   const SizedBox(width: 10),
-//                   Text('Your longitude: ${_userLocation?.longitude}'),
-//                 ],
-//               )
-//                   : const Text(
-//                   'Please enable location service and grant permission'),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
-
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    home: MyDropdownButton(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyDropdownButton extends StatefulWidget {
+  @override
+  _MyDropdownButtonState createState() => _MyDropdownButtonState();
+}
+
+class _MyDropdownButtonState extends State<MyDropdownButton> {
+  String selectedClaimType = '';
+
+  List<String> _claimTypes = [
+    'Claim Type 1',
+    'Claim Type 2',
+    'Claim Type 3',
+    'Claim Type 4',
+    'Claim Type 5',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dropdown Button'),
       ),
-      home: ListPage(),
+      body: Center(
+        child: Container(
+          width: 180,
+          decoration: BoxDecoration(
+            color: Colors.grey, // Change the color to your desired color
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), // Change the shadow color if needed
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3), // Adjust the offset for the drop shadow
+              ),
+            ],
+          ),
+          child: DropdownButton<String>(
+            value: selectedClaimType.isNotEmpty ? selectedClaimType : null,
+            hint: Text('Select Claim Type'),
+            onChanged: (String? value) {
+              setState(() {
+                selectedClaimType = value ?? '';
+              });
+            },
+            items: _claimTypes.map((String claimType) {
+              return DropdownMenuItem<String>(
+                value: claimType,
+                child: Text(claimType),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
     );
   }
 }
