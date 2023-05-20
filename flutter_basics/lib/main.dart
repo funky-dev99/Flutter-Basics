@@ -1,63 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: MyDropdownButton(),
-  ));
+  runApp(MyApp());
 }
 
-class MyDropdownButton extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyDropdownButtonState createState() => _MyDropdownButtonState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'File Picker Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
 }
 
-class _MyDropdownButtonState extends State<MyDropdownButton> {
-  String selectedClaimType = '';
-
-  List<String> _claimTypes = [
-    'Claim Type 1',
-    'Claim Type 2',
-    'Claim Type 3',
-    'Claim Type 4',
-    'Claim Type 5',
-  ];
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dropdown Button'),
+        title: Text('File Picker Demo'),
       ),
       body: Center(
-        child: Container(
-          width: 180,
-          decoration: BoxDecoration(
-            color: Colors.grey, // Change the color to your desired color
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5), // Change the shadow color if needed
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3), // Adjust the offset for the drop shadow
-              ),
-            ],
+        child: ElevatedButton.icon(
+          onPressed: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+            if (result != null) {
+              PlatformFile file = result.files.first;
+              print('File path: ${file.path}');
+              print('File name: ${file.name}');
+              print('File size: ${file.size}');
+            } else {
+              // User canceled the file picker
+            }
+          },
+          icon: Icon(
+            Icons.upload,
+            color: Colors.black,
           ),
-          child: DropdownButton<String>(
-            value: selectedClaimType.isNotEmpty ? selectedClaimType : null,
-            hint: Text('Select Claim Type'),
-            onChanged: (String? value) {
-              setState(() {
-                selectedClaimType = value ?? '';
-              });
-            },
-            items: _claimTypes.map((String claimType) {
-              return DropdownMenuItem<String>(
-                value: claimType,
-                child: Text(claimType),
-              );
-            }).toList(),
+          label: Text(
+            'Upload File',
+            style: TextStyle(color: Colors.black),
+          ),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(16.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            primary: Colors.grey, // Background color
           ),
         ),
+
+
       ),
     );
   }
