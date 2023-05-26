@@ -1,91 +1,127 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(CalculatorLoginApp());
 }
 
-class MyApp extends StatelessWidget {
+class CalculatorLoginApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Button Example',
+      title: 'Calculator Login',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Button Example'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MaterialButton(
-                onPressed: () {
-                  // Add your logic here for the first button
-                },
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'images/loc.png',
-                      height: 110,
-                      width: 170,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Mark With Location',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.all(10),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(
-                    color: Colors.grey, // Gray border color
-                    width: 2, // Border width
-                  ),
-                ),
-                minWidth: 215,
-                height: 170,
-                color: Colors.white, // White background color
-              ),
-              SizedBox(height: 20),
-              MaterialButton(
-                onPressed: () {
-                  // Add your logic here for the second button
-                },
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/second_image.jpg',
-                      height: 110,
-                      width: 170,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Second Button',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.all(0),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(
-                    color: Colors.grey, // Gray border color
-                    width: 2, // Border width
-                  ),
-                ),
-                minWidth: 215,
-                height: 170,
-                color: Colors.white, // White background color
-              ),
-            ],
+      home: CalculatorLoginPage(),
+    );
+  }
+}
+
+class CalculatorLoginPage extends StatefulWidget {
+  @override
+  _CalculatorLoginPageState createState() => _CalculatorLoginPageState();
+}
+
+class _CalculatorLoginPageState extends State<CalculatorLoginPage> {
+  String password = '';
+  String enteredPassword = '';
+
+  void _addNumber(int number) {
+    setState(() {
+      enteredPassword += number.toString();
+    });
+  }
+
+  void _deleteLastDigit() {
+    setState(() {
+      if (enteredPassword.isNotEmpty) {
+        enteredPassword = enteredPassword.substring(0, enteredPassword.length - 1);
+      }
+    });
+  }
+
+  void _submitPassword() {
+    if (enteredPassword == password) {
+      // Password matches, perform login action
+      print('Login successful');
+      // Navigate to the next screen or perform desired action
+    } else {
+      // Password doesn't match, display error message or perform desired action
+      print('Login failed');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Calculator Login'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              'Enter your password',
+              style: TextStyle(fontSize: 20.0),
+            ),
           ),
-        ),
+          SizedBox(height: 30.0),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              enteredPassword,
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(height: 30.0),
+          GridView.count(
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(20.0),
+            children: List.generate(10, (index) {
+              return GestureDetector(
+                onTap: () => _addNumber(index),
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Text(
+                    '$index',
+                    style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
+            }).toList()
+              ..add(
+                GestureDetector(
+                  onTap: _deleteLastDigit,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: Icon(
+                      Icons.backspace,
+                      size: 30.0,
+                    ),
+                  ),
+                ),
+              ),
+          ),
+          SizedBox(height: 30.0),
+          ElevatedButton(
+            onPressed: _submitPassword,
+            child: Text('Submit'),
+          ),
+        ],
       ),
     );
   }
