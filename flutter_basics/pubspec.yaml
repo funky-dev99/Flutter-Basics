@@ -41,6 +41,7 @@ dependencies:
   date_time_picker: "^2.1.0"
   file_picker: any
   flutter_slidable: ^3.0.0
+  flutter_native_splash: ^2.2.19
 
 
 
