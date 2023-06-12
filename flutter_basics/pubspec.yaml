@@ -43,6 +43,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   flutter_native_splash: ^2.2.19
   qr_code_scanner: ^1.0.1
+  profile: ^0.0.1
 
 
 

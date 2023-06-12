@@ -1,91 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:profile/profile.dart';
 
-class ListItem {
-  final String title;
-  final String subTitle;
-  final String description;
+class AdminPage extends StatefulWidget {
+  const AdminPage({Key? key}) : super(key: key);
 
-  ListItem({required this.title, required this.subTitle, required this.description});
+  @override
+  State<AdminPage> createState() => _AdminPageState();
 }
 
-class ListPage extends StatelessWidget {
-  final List<ListItem> items = [
-    ListItem(
-      title: 'Item 1',
-      subTitle: 'Sub Title 1',
-      description: 'Description 1',
-    ),
-    ListItem(
-      title: 'Item 2',
-      subTitle: 'Sub Title 2',
-      description: 'Description 2',
-    ),
-    ListItem(
-      title: 'Item 3',
-      subTitle: 'Sub Title 3',
-      description: 'Description 3',
-    ),
-    ListItem(
-      title: 'Item 4',
-      subTitle: 'Sub Title 4',
-      description: 'Description 4',
-    ),
-    ListItem(
-      title: 'Item 5',
-      subTitle: 'Sub Title 5',
-      description: 'Description 5',
-    ),
-    ListItem(
-      title: 'Item 6',
-      subTitle: 'Sub Title 6',
-      description: 'Description 6',
-    ),
-  ];
-
+class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('List Example'),
+        body: Center(
+      child: Profile(
+        imageUrl:
+            "https://images.unsplash.com/photo-1598618356794-eb1720430eb4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+        name: "Shamim Miah",
+        website: "shamimmiah.com",
+        designation: "Project Manager | Flutter & Blockchain Developer",
+        email: "cse.shamimosmanpailot@gmail.com",
+        phone_number: "01757736053",
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Icon(Icons.person),
-            title: Text(items[index].title),
-            subtitle: Text(items[index].subTitle),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Perform approve action
-                    print('Approve button pressed');
-                  },
-                  child: Text('Approve'),
-                ),
-                SizedBox(width: 8.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Perform reject action
-                    print('Reject button pressed');
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                  ),
-                  child: Text('Reject'),
-                ),
-
-              ],
-            ),
-            onTap: () {
-              // Handle item tap
-              print('Item $index tapped');
-            },
-          );
-        },
-      ),
-    );
+    ));
   }
 }
