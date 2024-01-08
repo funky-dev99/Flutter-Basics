@@ -1,102 +1,92 @@
-// ignore_for_file: public_member_api_docs, lines_longer_than_80_chars
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-/// This is a reimplementation of the default Flutter application using provider + [ChangeNotifier].
+import 'package:qr_flutter/qr_flutter.dart';
 
 void main() {
-  runApp(
-    /// Providers are above [MyApp] instead of inside it, so that tests
-    /// can use [MyApp] while mocking the providers
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Counter()),
-      ],
-      child: const MyApp(),
-    ),
-  );
-}
-
-/// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
-// ignore: prefer_mixin
-class Counter with ChangeNotifier, DiagnosticableTreeMixin {
-  int _count = 0;
-
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
-
-  /// Makes `Counter` readable inside the devtools by listing all of its properties
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(IntProperty('count', count));
-  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primaryColor: Colors.black54, primarySwatch: Colors.brown),
+      routes: {
+        '/': (context) => const GenerateQRCode(),
+        '/qr': (context) => const QRImage(),
+      },
+      initialRoute: '/',
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class GenerateQRCode extends StatelessWidget {
+  const GenerateQRCode({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Example'),
+        title: const Text('Flutter + QR code'),
+        centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text('You have pushed the button this many times:'),
-
-            /// Extracted as a separate widget for performance optimization.
-            /// As a separate widget, it will rebuild independently from [MyHomePage].
-            ///
-            /// This is totally optional (and rarely needed).
-            /// Similarly, we could also use [Consumer] or [Selector].
-            Count(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        key: const Key('increment_floatingActionButton'),
-
-        /// Calls `context.read` instead of `context.watch` so that it does not rebuild
-        /// when [Counter] changes.
-        onPressed: () => context.read<Counter>().increment(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(20),
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), labelText: 'Enter your URL'),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/qr', arguments: controller.text);
+            },
+            child: const Text('GENERATE QR CODE'),
+          ),
+        ],
       ),
     );
   }
 }
 
-class Count extends StatelessWidget {
-  const Count({Key? key}) : super(key: key);
+class QRImage extends StatelessWidget {
+  const QRImage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      /// Calls `context.watch` to make [Count] rebuild when [Counter] changes.
-      '${context.watch<Counter>().count}',
-      key: const Key('counterState'),
-      style: Theme.of(context).textTheme.headlineMedium,
+    final String? data = ModalRoute.of(context)!.settings.arguments as String?;
+
+    if (data == null) {
+      // Handle the case where data is not available.
+      return const Scaffold(
+        body: Center(
+          child: Text('Error: Missing QR Code data'),
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter + QR code'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: QrIma ge(
+          data: data,
+          size: 280,
+          embeddedImageStyle: QrEmbeddedImageStyle(
+            size: const Size(100, 100),
+          ),
+        ),
+      ),
     );
   }
 }
