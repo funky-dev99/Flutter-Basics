@@ -1,102 +1,158 @@
-// ignore_for_file: public_member_api_docs, lines_longer_than_80_chars
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:redacted/redacted.dart';
 
-/// This is a reimplementation of the default Flutter application using provider + [ChangeNotifier].
-
-void main() {
-  runApp(
-    /// Providers are above [MyApp] instead of inside it, so that tests
-    /// can use [MyApp] while mocking the providers
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Counter()),
-      ],
-      child: const MyApp(),
-    ),
-  );
-}
-
-/// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
-// ignore: prefer_mixin
-class Counter with ChangeNotifier, DiagnosticableTreeMixin {
-  int _count = 0;
-
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
-
-  /// Makes `Counter` readable inside the devtools by listing all of its properties
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(IntProperty('count', count));
-  }
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
+    return MaterialApp(
+      title: 'Shimmer',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const ExamplePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class ExamplePage extends StatefulWidget {
+  const ExamplePage({super.key});
+
+  @override
+  State<ExamplePage> createState() => _ExamplePageState();
+}
+
+class _ExamplePageState extends State<ExamplePage> {
+  bool loading = true;
+  Widget? loadingWidget;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Future.delayed(const Duration(seconds: 3), () {
+        setState(() {
+          loading = false;
+        });
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (loadingWidget == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(() {
+          loadingWidget =
+              const ShoeWidget().redacted(context: context, redact: true);
+        });
+      });
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Example'),
+        title: const Text('Redacted'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text('You have pushed the button this many times:'),
-
-            /// Extracted as a separate widget for performance optimization.
-            /// As a separate widget, it will rebuild independently from [MyHomePage].
-            ///
-            /// This is totally optional (and rarely needed).
-            /// Similarly, we could also use [Consumer] or [Selector].
-            Count(),
+          children: [
+            if (loading)
+              GridView.builder(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 24,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 0.7,
+                ),
+                itemBuilder: (context, index) {
+                  return loadingWidget;
+                },
+                itemCount: 5,
+              )
+            else
+              GridView.builder(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 24,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 0.7,
+                ),
+                itemBuilder: (context, index) {
+                  return const ShoeWidget();
+                },
+                itemCount: 20,
+              ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        key: const Key('increment_floatingActionButton'),
-
-        /// Calls `context.read` instead of `context.watch` so that it does not rebuild
-        /// when [Counter] changes.
-        onPressed: () => context.read<Counter>().increment(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
 
-class Count extends StatelessWidget {
-  const Count({Key? key}) : super(key: key);
+class ShoeWidget extends StatelessWidget {
+  const ShoeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      /// Calls `context.watch` to make [Count] rebuild when [Counter] changes.
-      '${context.watch<Counter>().count}',
-      key: const Key('counterState'),
-      style: Theme.of(context).textTheme.headlineMedium,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.grey.shade200,
+            ),
+            child: Image.asset("assets/shoe.png"),
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Row(
+          children: [
+            Text(
+              "\$180.99",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                color: Colors.red.shade300,
+              ),
+            ),
+            const Spacer(),
+            Icon(
+              Icons.star,
+              color: Colors.red.shade300,
+            ),
+            const Text(
+              "4.1",
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        const Text(
+          "Nike ACG Mountain",
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
 }
